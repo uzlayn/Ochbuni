@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вертикальный Видеоплеер со свайпом</title>
+    <title>Вертикальный Видеоплеер</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            background-color: #000;
+            background-color: var(--tg-theme-bg-color, #000);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -15,14 +16,14 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
-            color: #fff;
+            color: var(--tg-theme-text-color, #fff);
         }
 
         .video-player-container {
             position: relative;
             width: 100vw;
             height: 100vh;
-            background-color: #000;
+            background-color: var(--tg-theme-bg-color, #000);
             border-radius: 0;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
@@ -180,8 +181,8 @@
         }
         
         .look-now-button {
-            background-color: #fff;
-            color: #000;
+            background-color: var(--tg-theme-button-color, #fff);
+            color: var(--tg-theme-button-text-color, #000);
             border: none;
             padding: 12px 25px;
             border-radius: 50px;
@@ -209,7 +210,6 @@
             color: #ccc;
         }
         
-        /* Дополнительный стиль для отображения названия вместо кнопки */
         .no-button-title {
             padding: 12px 25px;
             font-size: 1em;
@@ -237,7 +237,7 @@
             width: 80%;
             max-width: 400px;
             padding: 40px 25px;
-            background-color: #1a1a1a;
+            background-color: var(--tg-theme-secondary-bg-color, #1a1a1a);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             display: flex;
@@ -279,7 +279,7 @@
 
         /* Основное модальное окно */
         .modal-content {
-            background-color: #1a1a1a;
+            background-color: var(--tg-theme-bg-color, #1a1a1a);
             padding: 0;
             border-radius: 0;
             width: 100vw;
@@ -332,7 +332,7 @@
             margin: 0 25px 20px;
         }
         .close-button {
-            background-color: #e53935;
+            background-color: var(--tg-theme-destructive-text-color, #e53935);
             color: #fff;
             border: none;
             border-radius: 50%;
@@ -345,38 +345,37 @@
             align-items: center;
         }
 
-        /* Стили для вкладок и списков... (оставлены без изменений) */
+        /* Стили для вкладок и списков... */
         .tabs { display: flex; gap: 15px; margin-bottom: 20px; padding: 0 25px; }
         .tabs button { background: none; border: none; color: #888; font-size: 1em; cursor: pointer; transition: color 0.2s, border-bottom 0.2s; padding: 5px 0; position: relative; }
-        .tabs button.active { color: #fff; }
-        .tabs button.active::after { content: ''; position: absolute; left: 0; bottom: -5px; width: 100%; height: 2px; background-color: #fff; }
+        .tabs button.active { color: var(--tg-theme-link-color, #fff); }
+        .tabs button.active::after { content: ''; position: absolute; left: 0; bottom: -5px; width: 100%; height: 2px; background-color: var(--tg-theme-link-color, #fff); }
         .tab-content { display: none; flex-direction: column; gap: 20px; flex-grow: 1; overflow-y: auto; }
         .tab-content.active { display: flex; }
         .tab-content-inner { flex-grow: 1; padding: 0 25px 25px; overflow-y: auto; }
         .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
-        .form-group input, .form-group select, .form-group textarea { background-color: #333; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 8px; font-size: 1em; }
-        .submit-button { background-color: #1db954; color: #fff; border: none; padding: 15px; border-radius: 50px; font-size: 1em; font-weight: bold; cursor: pointer; transition: background-color 0.2s; width: 100%; }
-        .submit-button:hover { background-color: #1ed760; }
+        .form-group input, .form-group select, .form-group textarea { background-color: var(--tg-theme-secondary-bg-color, #333); border: 1px solid #555; color: var(--tg-theme-text-color, #fff); padding: 10px; border-radius: 8px; font-size: 1em; }
+        .submit-button { background-color: var(--tg-theme-button-color, #1db954); color: var(--tg-theme-button-text-color, #fff); border: none; padding: 15px; border-radius: 50px; font-size: 1em; font-weight: bold; cursor: pointer; transition: background-color 0.2s; width: 100%; }
+        .submit-button:hover { background-color: var(--tg-theme-button-color, #1ed760); }
         .item-list { display: flex; flex-direction: column; gap: 15px; }
-        .list-item { background-color: #282828; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .list-item { background-color: var(--tg-theme-secondary-bg-color, #282828); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
         .list-item.inactive { opacity: 0.5; text-decoration: line-through; }
         .list-item-info { display: flex; flex-direction: column; flex-grow: 1; }
         .list-item-title { font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .list-item-url { font-size: 0.8em; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .item-actions { display: flex; gap: 10px; }
         .item-actions button { background: none; border: none; color: #888; font-size: 1.2em; cursor: pointer; transition: color 0.2s; }
-        .item-actions button.active { color: #1db954; }
-        .item-actions button:hover { color: #fff; }
+        .item-actions button.active { color: var(--tg-theme-link-color, #1db954); }
+        .item-actions button:hover { color: var(--tg-theme-link-color, #fff); }
         .inner-tabs { display: flex; gap: 10px; margin-bottom: 20px; padding: 0 25px; border-bottom: 1px solid #444; }
         .inner-tabs button { background: none; border: none; color: #888; font-size: 0.9em; cursor: pointer; padding: 10px 0; position: relative; }
-        .inner-tabs button.active { color: #fff; }
-        .inner-tabs button.active::after { content: ''; position: absolute; left: 0; bottom: -1px; width: 100%; height: 2px; background-color: #fff; }
+        .inner-tabs button.active { color: var(--tg-theme-link-color, #fff); }
+        .inner-tabs button.active::after { content: ''; position: absolute; left: 0; bottom: -1px; width: 100%; height: 2px; background-color: var(--tg-theme-link-color, #fff); }
         .dynamic-form-content { display: none; }
         .dynamic-form-content.active { display: block; }
         .inner-tab-content { display: none; }
         .inner-tab-content.active { display: flex; flex-direction: column; gap: 20px; }
         #edit-modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
-        #edit-modal .modal-content { width: 90%; max-width: 500px; height: auto; max-height: 90vh; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 25px; background-color: #1a1a1a; overflow-y: auto; }
+        #edit-modal .modal-content { width: 90%; max-width: 500px; height: auto; max-height: 90vh; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); padding: 25px; background-color: var(--tg-theme-secondary-bg-color, #1a1a1a); overflow-y: auto; }
         #edit-modal .modal-content .modal-header { padding: 0; }
         
         /* Стили для профиля обычного пользователя */
@@ -392,7 +391,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            background-color: #282828;
+            background-color: var(--tg-theme-secondary-bg-color, #282828);
             padding: 10px;
             border-radius: 10px;
         }
@@ -461,7 +460,7 @@
 
             <div class="tabs">
                 <button class="tab-button active" data-tab-target="video-section">Видео</button>
-                <button class="tab-button" data-tab-target="ads-section">Реклама</button>
+                <button class="tab-button" data-tab-content-target="ads-section">Реклама</button>
             </div>
             
             <div id="video-section" class="tab-content active">
@@ -647,14 +646,10 @@
                     const videoSrc = item.file ? URL.createObjectURL(item.file) : item.src;
                     
                     let bottomControlsHtml = '';
-                    if (item.buttonName && item.buttonLink) {
-                        bottomControlsHtml = `
-                            <a href="${item.buttonLink}" target="_blank" class="look-now-button">${item.buttonName}</a>
-                        `;
+                    if (item.buttonName) {
+                        bottomControlsHtml = `<a href="${item.buttonLink}" target="_blank" class="look-now-button">${item.buttonName}</a>`;
                     } else {
-                        bottomControlsHtml = `
-                            <span class="no-button-title">${item.title}</span>
-                        `;
+                        bottomControlsHtml = `<span class="no-button-title">${item.title}</span>`;
                     }
 
                     itemDiv.innerHTML = `
@@ -1097,8 +1092,32 @@
             });
         }
 
-        // Инициализация при загрузке
+        // --- Инициализация Mini App ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Инициализация Mini App
+            try {
+                if (window.Telegram && window.Telegram.WebApp) {
+                    const webApp = window.Telegram.WebApp;
+                    webApp.ready();
+                    webApp.expand(); // Разворачиваем приложение на весь экран
+
+                    // Обновляем стили на основе темы Telegram
+                    document.documentElement.style.setProperty('--tg-theme-bg-color', webApp.themeParams.bg_color);
+                    document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', webApp.themeParams.secondary_bg_color);
+                    document.documentElement.style.setProperty('--tg-theme-text-color', webApp.themeParams.text_color);
+                    document.documentElement.style.setProperty('--tg-theme-link-color', webApp.themeParams.link_color);
+                    document.documentElement.style.setProperty('--tg-theme-button-color', webApp.themeParams.button_color);
+                    document.documentElement.style.setProperty('--tg-theme-button-text-color', webApp.themeParams.button_text_color);
+                    document.documentElement.style.setProperty('--tg-theme-destructive-text-color', webApp.themeParams.destructive_text_color);
+                } else {
+                    console.error("Telegram Web App SDK is not available.");
+                }
+            } catch (e) {
+                console.error("Error initializing Telegram Mini App:", e);
+                alert("Ошибка инициализации Telegram Mini App. Проверьте консоль.");
+            }
+            
+            // Инициализация плеера
             renderPlayer();
         });
     </script>
